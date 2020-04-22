@@ -39,9 +39,17 @@ Image make_box_filter(int w)
   assert(w%2); // w needs to be odd
   
   // TODO: Implement the filter
-  NOT_IMPLEMENTED();
-  
-  return Image(1,1,1);
+
+    Image box(w,w,1);
+    float val = 1 / (w * w);
+
+    for (int y = 0; y < box.h; y++) {
+        for (int x = 0; x < box.w; x ++) {
+            box(x,y,0) = val;
+        }
+    }
+
+    return box;
   }
 
 // HW1 #2.2
