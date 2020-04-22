@@ -53,6 +53,8 @@ void test_highpass_filter()
   Image f = make_highpass_filter();
   Image blur = convolve_image(im, f, false);
   blur.clamp();
+  blur.save_image("output/dog_highpass");
+
   Image gt = load_image("data/dog-highpass.png");
   TEST(same_image(blur, gt));
   }
@@ -63,6 +65,7 @@ void test_emboss_filter()
   Image f = make_emboss_filter();
   Image blur = convolve_image(im, f, true);
   blur.clamp();
+  blur.save_image("output/dog_emboss");
   
   Image gt = load_image("data/dog-emboss.png");
   TEST(same_image(blur, gt));
@@ -74,6 +77,7 @@ void test_sharpen_filter()
   Image f = make_sharpen_filter();
   Image blur = convolve_image(im, f, true);
   blur.clamp();
+  blur.save_image("output/dog_sharpen");
   
   Image gt = load_image("data/dog-sharpen.png");
   TEST(same_image(blur, gt));
@@ -199,8 +203,12 @@ void run_tests()
 //  test_nn_resize();
 //  test_bl_resize();
 //  test_multiple_resize();
+//    test_convolution();
 
-  test_convolution();
+
+  test_sharpen_filter();
+  test_emboss_filter();
+  test_highpass_filter();
 
   
 //  test_gaussian_filter();

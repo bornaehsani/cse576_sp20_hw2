@@ -118,10 +118,20 @@ Image convolve_image(const Image& im, const Image& filter, bool preserve)
 Image make_highpass_filter()
   {
   // TODO: Implement the filter
-  NOT_IMPLEMENTED();
-  
-  return Image(1,1,1);
-  
+
+    Image f (3,3,1);
+
+    f(0,0,0) = 0;
+    f(1,0,0) = -1;
+    f(2,0,0) = 0;
+    f(0,1,0) = -1;
+    f(1,1,0) = 4;
+    f(2,1,0) = -1;
+    f(0,2,0) = 0;
+    f(1,2,0) = -1;
+    f(2,2,0) = 0;
+
+    return f;
   }
 
 // HW1 #2.3
@@ -129,10 +139,20 @@ Image make_highpass_filter()
 Image make_sharpen_filter()
   {
   // TODO: Implement the filter
-  NOT_IMPLEMENTED();
-  
-  return Image(1,1,1);
-  
+
+    Image f (3,3,1);
+
+    f(0,0,0) = 0;
+    f(1,0,0) = -1;
+    f(2,0,0) = 0;
+    f(0,1,0) = -1;
+    f(1,1,0) = 5;
+    f(2,1,0) = -1;
+    f(0,2,0) = 0;
+    f(1,2,0) = -1;
+    f(2,2,0) = 0;
+
+    return f;
   }
 
 // HW1 #2.3
@@ -140,10 +160,20 @@ Image make_sharpen_filter()
 Image make_emboss_filter()
   {
   // TODO: Implement the filter
-  NOT_IMPLEMENTED();
-  
-  return Image(1,1,1);
-  
+
+    Image f (3,3,1);
+
+    f(0,0,0) = -2;
+    f(1,0,0) = -1;
+    f(2,0,0) = 0;
+    f(0,1,0) = -1;
+    f(1,1,0) = 1;
+    f(2,1,0) = 1;
+    f(0,2,0) = 0;
+    f(1,2,0) = 1;
+    f(2,2,0) = 2;
+
+    return f;
   }
 
 // HW1 #2.4
