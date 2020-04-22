@@ -13,9 +13,22 @@ void l1_normalize(Image& im)
   {
   
   // TODO: Normalize each channel
-  NOT_IMPLEMENTED();
-  
-  
+
+    for (int c = 0; c < im.c; c ++) {
+        float sum = 0.0;
+        for (int y = 0; y < im.h; y ++) {
+            for (int x = 0; x < im.w; x ++) {
+                sum += im(x,y,c);
+            }
+        }
+
+        for (int y = 0; y < im.h; y ++) {
+            for (int x = 0; x < im.w; x ++) {
+                im(x,y,c) = (float) im(x,y,c) / sum;
+            }
+        }
+    }
+    return;
   }
 
 // HW1 #2.1
