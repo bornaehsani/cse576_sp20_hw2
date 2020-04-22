@@ -85,6 +85,7 @@ void test_convolution()
   Image f = make_box_filter(7);
   Image blur = convolve_image(im, f, true);
   blur.clamp();
+  blur.save_image("output/dog_conv");
   
   Image gt = load_image("data/dog-box7.png");
   TEST(same_image(blur, gt));
@@ -195,10 +196,13 @@ void test_bilateral()
 
 void run_tests()
   {
-  test_nn_resize();
-  test_bl_resize();
+//  test_nn_resize();
+//  test_bl_resize();
 //  test_multiple_resize();
-//  
+
+  test_convolution();
+
+  
 //  test_gaussian_filter();
 //  test_sharpen_filter();
 //  test_emboss_filter();

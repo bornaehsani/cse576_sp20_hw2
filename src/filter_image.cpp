@@ -41,7 +41,7 @@ Image make_box_filter(int w)
   // TODO: Implement the filter
 
     Image box(w,w,1);
-    float val = 1 / (w * w);
+    float val = 1 / (float) (w * w);
 
     for (int y = 0; y < box.h; y++) {
         for (int x = 0; x < box.w; x ++) {
@@ -59,17 +59,58 @@ Image make_box_filter(int w)
 // returns the convolved image
 Image convolve_image(const Image& im, const Image& filter, bool preserve)
   {
-  assert(filter.c==1);
-  Image ret;
-  // This is the case when we need to use the function clamped_pixel(x,y,c).
-  // Otherwise you'll have to manually check whether the filter goes out of bounds
+//  Image ret;
+//  // This is the case when we need to use the function clamped_pixel(x,y,c).
+//  // Otherwise you'll have to manually check whether the filter goes out of bounds
+//  
+//  // TODO: Make sure you set the sizes of ret properly. Use ret=Image(w,h,c) to reset ret
+//  // TODO: Do the convolution operator
+//  NOT_IMPLEMENTED();
+//  
+//  // Make sure to return ret and not im. This is just a placeholder
+//  return im;
+
+    assert(filter.c==1);
+    Image conv(im.w, im.h, im.c);
   
-  // TODO: Make sure you set the sizes of ret properly. Use ret=Image(w,h,c) to reset ret
-  // TODO: Do the convolution operator
-  NOT_IMPLEMENTED();
-  
-  // Make sure to return ret and not im. This is just a placeholder
-  return im;
+    for (int c = 0; c < im.c; c ++) {
+        for (int y = 0; y < im.h; y ++) {
+            for (int x = 0; x < im.w; x ++) {
+
+                // The starting coordinates in image 
+                int sx = x - (filter.w / 2);
+                int sy = y - (filter.h / 2);
+
+                float sum = 0.0;
+
+                for (int fy = 0; fy < filter.h; fy ++) {
+                    for (int fx = 0; fx < filter.w; fx ++) {
+                        sum += filter(fx, fy, 0) * im.clamped_pixel(sx + fx, sy + fy, c);
+                    }
+                }
+                
+                conv(x,y,c) = sum;
+            }
+        }
+    }
+
+
+    if (!preserve) {
+        for (int y = 0; y < conv.h; y ++) {
+            for (int x = 0; x < conv.w; x ++) {
+                float sum = 0;
+                for (int c = 0; c < conv.c; c ++) {
+                    sum += conv(x,y,c);
+                }
+                conv(x,y,0) = sum;
+            }
+        }
+        conv.c = 1;
+    }
+
+    //l1_normalize(conv);
+
+    return conv;
   }
 
 // HW1 #2.3
