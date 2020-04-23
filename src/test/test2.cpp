@@ -111,6 +111,7 @@ void test_gaussian_blur()
   Image f = make_gaussian_filter(2);
   Image blur = convolve_image(im, f, true);
   blur.clamp();
+  blur.save_image("output/dog_gaussian");
   
   Image gt = load_image("data/dog-gauss2.png");
   TEST(same_image(blur, gt));
@@ -204,19 +205,14 @@ void run_tests()
 //  test_bl_resize();
 //  test_multiple_resize();
 //    test_convolution();
-
-
-  test_sharpen_filter();
-  test_emboss_filter();
-  test_highpass_filter();
-
-  
-//  test_gaussian_filter();
 //  test_sharpen_filter();
 //  test_emboss_filter();
 //  test_highpass_filter();
-//  test_convolution();
 //  test_gaussian_blur();
+
+    test_gaussian_blur();
+
+//  test_convolution();
 //  test_hybrid_image();
 //  test_frequency_image();
 //  test_sobel();

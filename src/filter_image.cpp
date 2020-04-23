@@ -182,10 +182,31 @@ Image make_emboss_filter()
 Image make_gaussian_filter(float sigma)
   {
   // TODO: Implement the filter
-  NOT_IMPLEMENTED();
-  
-  return Image(1,1,1);
-  
+
+    int w = ceil (sigma * 6);
+    if (!(w % 2))
+        w ++;
+
+    Image f (w,w,1);
+
+    for (int y = 0; y < f.h; y ++) {
+        for (int x = 0; x < f.w; x ++) {
+
+            int rx = x - (w/2);
+            int ry = y - (w/2);
+
+            float var = powf(sigma, 2);
+            float c = 2 * M_PI * var;
+            float p = -(powf(rx,2) + powf(ry,2)) / (2 * var);
+            float e = expf(p);
+            float val = e / c;
+            f(x,y,0) = val;
+        }
+    }
+
+    l1_normalize(f);
+
+    return f;
   }
 
 
