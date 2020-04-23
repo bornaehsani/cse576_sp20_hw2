@@ -214,9 +214,9 @@ void run_tests()
 //  test_gaussian_blur();
 //  test_hybrid_image();
 //  test_frequency_image();
-  test_sobel();
-//  
-//  test_bilateral();
+//  test_sobel();
+  
+    test_bilateral();
 //  printf("%d tests, %d passed, %d failed\n", tests_total, tests_total-tests_fail, tests_fail);
   }
 
