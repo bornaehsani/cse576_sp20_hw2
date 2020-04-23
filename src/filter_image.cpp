@@ -364,8 +364,8 @@ pair<Image,Image> sobel_image(const Image& im)
 
     for (int y = 0; y < im.h; y ++) {
         for (int x = 0; x < im.w; x ++) {
-            G(x,y,0) = sqrt ( pow(Gx(x,y,0), 2) + pow(Gy(x,y,0), 2));
-            T(x,y,0) = atan2( Gy(x,y,0) , Gx(x,y,0));
+            G(x,y,0) = sqrtf ( pow(Gx(x,y,0), 2) + pow(Gy(x,y,0), 2));
+            T(x,y,0) = atan2f( Gy(x,y,0) , Gx(x,y,0));
         }
     }
 
