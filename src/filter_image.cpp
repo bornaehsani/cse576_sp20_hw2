@@ -415,18 +415,90 @@ Image colorize_sobel(const Image& im)
   }
 
 
+
+Image make_bilateral_filter (const Image &im, const Image &sgf, int cx, int cy, int cc, float sigma) {
+
+
+    // Color gaussian filter
+    Image cgf (sgf.w, sgf.h, 1);
+
+    for (int y = 0; y < sgf.w; y ++) {
+        for (int x = 0; x < sgf.w; x ++) {
+            int ax = cx - sgf.w/2 + x;
+            int ay = cy - sgf.w/2 + y;
+
+            float diff = im.clamped_pixel(ax ,ay ,cc) - im.clamped_pixel(cx, cy, cc);
+
+            float var = powf(sigma, 2);
+            float c = 2 * M_PI * var;
+            float p = - powf(diff,2) / (2 * var);
+            float e = expf(p);
+            float val = e / c;
+
+            cgf(x,y,0) = val;
+
+        }
+    }
+
+
+    Image bf (sgf.w, sgf.h, 1);
+
+    // Multiply space gaussian by color gaussian 
+    for (int y = 0; y < bf.h; y ++) {
+        for (int x = 0; x < bf.w; x ++) {
+            bf (x,y,0) = sgf(x,y,0) * cgf(x,y,0);
+        }
+    }
+
+
+    l1_normalize(bf);
+
+
+    return bf;
+}    
+ 
+
+
+
+
 // HW1 #4.5
 // const Image& im: input image
 // float sigma1,sigma2: the two sigmas for bilateral filter
 // returns the result of applying bilateral filtering to im
 Image bilateral_filter(const Image& im, float sigma1, float sigma2)
   {
-  Image bf=im;
-  
-  // TODO: Your bilateral code
-  NOT_IMPLEMENTED();
-  
-  return bf;
+
+    Image gf = make_gaussian_filter(sigma1);
+
+    Image res(im.w, im.h, im.c);
+ 
+
+    for (int c = 0; c < res.c; c ++) {
+        for (int y = 0; y < im.h; y ++) {
+            for (int x = 0; x < im.w; x ++) {
+
+                // Get bilateral filter
+                Image bf = make_bilateral_filter(im, gf, x, y, c, sigma2);
+
+                float sum = 0.0;
+                // Convolve for pixel x,y,c
+                for (int fy = 0; fy < gf.w; fy ++) {
+                    for (int fx = 0; fx < gf.w; fx ++) {
+ 
+                        int ax = x - bf.w/2 + fx;
+                        int ay = y - bf.w/2 + fy;
+
+                        sum += bf(fx,fy,0) * im.clamped_pixel( ax, ay, c);
+                    }
+                }
+
+                res (x,y,c) = sum;
+
+            }
+        }
+    }
+
+    return res;
   }
 
 
