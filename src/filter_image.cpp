@@ -216,13 +216,18 @@ Image make_gaussian_filter(float sigma)
 // returns their sum
 Image add_image(const Image& a, const Image& b)
   {
-  assert(a.w==b.w && a.h==b.h && a.c==b.c); // assure images are the same size
-  
-  // TODO: Implement addition
-  NOT_IMPLEMENTED();
-  
-  return a;
-  
+    assert(a.w==b.w && a.h==b.h && a.c==b.c); // assure images are the same size
+
+    Image res (a.w, a.h, a.c);
+    for (int c = 0; c < res.c; c++) {
+        for (int y = 0; y < res.h; y ++) {
+            for (int x = 0; x < res.w; x ++) {
+                res(x,y,c) = a(x,y,c) + b(x,y,c);
+            }
+        }
+    }
+
+    return res;  
   }
 
 // HW1 #3
@@ -231,13 +236,18 @@ Image add_image(const Image& a, const Image& b)
 // returns their difference res=a-b
 Image sub_image(const Image& a, const Image& b)
   {
-  assert(a.w==b.w && a.h==b.h && a.c==b.c); // assure images are the same size
-  
-  // TODO: Implement subtraction
-  NOT_IMPLEMENTED();
-  
-  return a;
-  
+    assert(a.w==b.w && a.h==b.h && a.c==b.c); // assure images are the same size
+
+    Image res (a.w, a.h, a.c);
+    for (int c = 0; c < res.c; c++) {
+        for (int y = 0; y < res.h; y ++) {
+            for (int x = 0; x < res.w; x ++) {
+                res(x,y,c) = a(x,y,c) - b(x,y,c);
+            }
+        }
+    }
+
+    return res;
   }
 
 // HW1 #4.1
