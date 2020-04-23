@@ -379,11 +379,39 @@ pair<Image,Image> sobel_image(const Image& im)
 // returns the colorized Sobel image of the same size
 Image colorize_sobel(const Image& im)
   {
-  
-  // TODO: Your code here
-  NOT_IMPLEMENTED();
-  
-  return im;
+
+    Image f = make_gaussian_filter(4);
+    Image blur = convolve_image(im, f, true);
+    blur.clamp();
+
+    pair<Image, Image> sobel = sobel_image(blur);
+
+    Image mag = sobel.first;
+    Image theta = sobel.second;
+
+
+    feature_normalize(mag);
+
+    for (int y = 0; y < im.h; y ++) {
+        for (int x = 0; x < im.w; x ++) {
+            theta(x,y,0) = theta(x,y,0) / (2 * M_PI) + 0.5;
+        }
+    }
+
+
+    Image hsv (im.w, im.h, 3);
+
+    for (int y = 0; y < im.h; y ++) {
+        for (int x = 0; x < im.w; x ++) {
+            hsv(x,y,0) = theta(x,y,0);
+            hsv(x,y,1) = mag(x,y,0);
+            hsv(x,y,2) = mag(x,y,0);
+        }
+    }
+
+    hsv_to_rgb(hsv);
+
+    return hsv;
   }
 
 
