@@ -255,9 +255,20 @@ Image sub_image(const Image& a, const Image& b)
 Image make_gx_filter()
   {
   // TODO: Implement the filter
-  NOT_IMPLEMENTED();
-  
-  return Image(1,1,1);
+
+    Image f (3,3,1);
+
+    f(0,0,0) = -1;
+    f(1,0,0) = 0;
+    f(2,0,0) = 1;
+    f(0,1,0) = -2;
+    f(1,1,0) = 0;
+    f(2,1,0) = 2;
+    f(0,2,0) = -1;
+    f(1,2,0) = 0;
+    f(2,2,0) = 1;
+
+    return f;
   }
 
 // HW1 #4.1
@@ -265,9 +276,20 @@ Image make_gx_filter()
 Image make_gy_filter()
   {
   // TODO: Implement the filter
-  NOT_IMPLEMENTED();
-  
-  return Image(1,1,1);
+
+    Image f (3,3,1);
+
+    f(0,0,0) = -1;
+    f(1,0,0) = -2;
+    f(2,0,0) = -1;
+    f(0,1,0) = 0;
+    f(1,1,0) = 0;
+    f(2,1,0) = 0;
+    f(0,2,0) = 1;
+    f(1,2,0) = 2;
+    f(2,2,0) = 1;
+
+    return f;
   }
 
 // HW1 #4.2
@@ -277,8 +299,34 @@ void feature_normalize(Image& im)
   assert(im.w*im.h); // assure we have non-empty image
   
   // TODO: Normalize the features for each channel
-  NOT_IMPLEMENTED();
-  
+
+
+    for (int c = 0; c < im.c; c ++) {
+
+        float min_val = im(0,0,c);
+        float max_val = im(0,0,c);
+
+        for (int y = 0; y < im.h; y ++) {
+            for (int x = 0; x < im.w; x ++) {
+                min_val = min (min_val, im(x,y,c));
+                max_val = max (max_val, im(x,y,c));
+            }
+        }
+
+       float range = max_val - min_val;
+
+       for (int y = 0; y < im.h; y ++) {
+           for (int x = 0; x < im.w; x++) {
+               if (range) {
+                   im(x,y,c) = (im(x,y,c) - min_val) / range;
+               }
+               else 
+                   im(x,y,c) = 0;
+            }
+        }
+    }
+
+    return;
   }
 
 
@@ -302,10 +350,27 @@ void feature_normalize_total(Image& im)
 // return a pair of images of the same size
 pair<Image,Image> sobel_image(const Image& im)
   {
-  // TODO: Your code here
-  NOT_IMPLEMENTED();
-  
-  return {im,im};
+
+    Image fx = make_gx_filter();
+    Image fy = make_gy_filter();
+
+    Image Gx = convolve_image (im, fx, false);
+    Image Gy = convolve_image (im, fy, false);
+
+
+    Image G(im.w, im.h, 1);
+    Image T(im.w, im.h, 1);
+
+
+    for (int y = 0; y < im.h; y ++) {
+        for (int x = 0; x < im.w; x ++) {
+            G(x,y,0) = sqrt ( pow(Gx(x,y,0), 2) + pow(Gy(x,y,0), 2));
+            T(x,y,0) = atan2( Gy(x,y,0) , Gx(x,y,0));
+        }
+    }
+
+
+    return {G,T};
   }
 
 

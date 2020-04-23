@@ -155,6 +155,9 @@ void test_sobel()
   pair<Image,Image> res = sobel_image(im);
   Image mag = res.first;
   Image theta = res.second;
+
+  mag.save_png("output/mag");
+  theta.save_png("output/theta");
   
   feature_normalize(mag);
   feature_normalize(theta);
@@ -204,18 +207,14 @@ void run_tests()
 //  test_nn_resize();
 //  test_bl_resize();
 //  test_multiple_resize();
-//    test_convolution();
+//  test_convolution();
 //  test_sharpen_filter();
 //  test_emboss_filter();
 //  test_highpass_filter();
 //  test_gaussian_blur();
-
-    test_gaussian_blur();
-
-//  test_convolution();
 //  test_hybrid_image();
 //  test_frequency_image();
-//  test_sobel();
+  test_sobel();
 //  
 //  test_bilateral();
 //  printf("%d tests, %d passed, %d failed\n", tests_total, tests_total-tests_fail, tests_fail);
